@@ -15,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className="scroll-smooth">
-      <body className="relative min-h-screen text-neutral-800">{children}</body>
+      <body className="relative min-h-screen bg-body text-neutral-700">
+        {children}
+      </body>
     </html>
   )
 }

@@ -3,7 +3,6 @@ import type { CandleData } from 'charts-api'
 
 import { HomeView } from '@/layouts/HomeView'
 import { fetchAPI } from '@/utils/fetchAPI'
-import { revalidateTag } from 'next/cache'
 
 export default async function HomePage() {
   const candleChartRes = await fetchAPI<{ candleChartData: CandleData }>(
