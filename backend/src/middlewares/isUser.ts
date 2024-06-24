@@ -33,8 +33,6 @@ export const isUser = (
     request.routeOptions.config.user = decoded;
     done();
   } catch (err) {
-    reply.log.error(err);
-
     return reply.status(401).send({ message: "Not Authorized" });
   }
 };
