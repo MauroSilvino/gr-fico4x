@@ -6,6 +6,7 @@ import fastifyRateLimit from "@fastify/rate-limit";
 import * as zodProvider from "fastify-type-provider-zod";
 
 import { errorHandler } from "./error-handler";
+import { usersController } from "./controllers/users/router";
 import { chartsController } from "./controllers/charts/router";
 
 const app = Fastify({
@@ -35,6 +36,7 @@ app.get("/", async (request, reply) => {
 });
 
 /* Controllers */
+app.register(usersController);
 app.register(chartsController);
 
 try {
