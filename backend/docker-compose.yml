@@ -1,12 +1,17 @@
-version: "3.8"
+version: "3.9"
 
 services:
-  db:
-    image: postgres:latest
-    container_name: postgres_container
+  grafico_postgres:
+    container_name: grafico_postgres
+    image: postgres:16.3-alpine3.19
     environment:
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_DB}
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=Teste123!@#
+      - POSTGRES_DB=grafico
     ports:
       - "5432:5432"
+    volumes:
+      - grafico_postgres:/var/lib/postgresql/data
+
+volumes:
+  grafico_postgres:
