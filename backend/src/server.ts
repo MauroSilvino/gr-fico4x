@@ -3,7 +3,13 @@ import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
 import fastifyHelmet from "@fastify/helmet";
 import fastifyRateLimit from "@fastify/rate-limit";
-import * as zodProvider from "fastify-type-provider-zod";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUI from "@fastify/swagger-ui";
+import {
+  validatorCompiler,
+  serializerCompiler,
+  jsonSchemaTransform,
+} from "fastify-type-provider-zod";
 
 import { errorHandler } from "./error-handler";
 import { usersController } from "./controllers/users/router";
@@ -26,9 +32,24 @@ app.register(fastifyRateLimit, {
   timeWindow: 1000 * 30, // 30 segundos
 });
 
-app.setValidatorCompiler(zodProvider.validatorCompiler);
-app.setSerializerCompiler(zodProvider.serializerCompiler);
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
 app.setErrorHandler(errorHandler);
+
+app.register(fastifySwagger, {
+  swagger: {
+    consumes: ["application/json"],
+    produces: ["application/json"],
+    info: {
+      version: "1.0.0",
+      title: "API Gráfico",
+    },
+  },
+  transform: jsonSchemaTransform,
+});
+app.register(fastifySwaggerUI, {
+  routePrefix: "/docs",
+});
 
 /*  Index Route */
 app.get("/", async (request, reply) => {

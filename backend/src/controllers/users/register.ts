@@ -4,18 +4,15 @@ import bcrypt from "bcrypt";
 
 import { prisma } from "../../lib/prisma";
 
-const registerSchema = z.object({
+export const registerBodySchema = z.object({
   name: z.string(),
   email: z.string().email(),
   password: z.string(),
   repeatPassword: z.string(),
 });
 
-export default async function register(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  const { name, email, password, repeatPassword } = registerSchema.parse(
+export async function register(request: FastifyRequest, reply: FastifyReply) {
+  const { name, email, password, repeatPassword } = registerBodySchema.parse(
     request.body
   );
 
@@ -45,3 +42,12 @@ export default async function register(
 
   return reply.status(201).send({ message: "CREATED" });
 }
+
+export const registerResponseSchema = {
+  400: z.object({
+    message: z.enum(["Passwords Do Not Match", "Email Already Exists"]),
+  }),
+  201: z.object({
+    message: z.literal("CREATED"),
+  }),
+};

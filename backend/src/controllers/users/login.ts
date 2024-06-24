@@ -5,16 +5,13 @@ import jwt from "jsonwebtoken";
 
 import { prisma } from "../../lib/prisma";
 
-const loginSchema = z.object({
+export const loginBodySchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
 
-export default async function login(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  const { email, password } = loginSchema.parse(request.body);
+export async function login(request: FastifyRequest, reply: FastifyReply) {
+  const { email, password } = loginBodySchema.parse(request.body);
 
   const user = await prisma.users.findUnique({
     where: {
@@ -43,3 +40,10 @@ export default async function login(
 
   return reply.status(204).send();
 }
+
+export const loginResponseSchema = {
+  400: z.object({
+    message: z.literal("Invalid Credentials"),
+  }),
+  204: z.undefined(),
+};

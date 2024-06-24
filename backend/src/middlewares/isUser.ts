@@ -9,11 +9,11 @@ declare module "fastify" {
   }
 }
 
-export async function isUser(
+export const isUser = (
   request: FastifyRequest,
   reply: FastifyReply,
   done: HookHandlerDoneFunction
-) {
+) => {
   try {
     const authorization = request.headers["authorization"];
     if (!authorization)
@@ -37,4 +37,4 @@ export async function isUser(
 
     return reply.status(401).send({ message: "Not Authorized" });
   }
-}
+};
