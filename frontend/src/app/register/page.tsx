@@ -1,9 +1,12 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+
+import { fetchAPI } from '@/utils/fetchAPI'
 
 const RegisterSchema = z.object({
   name: z.string().min(1, 'Campo Obrigatório'),
@@ -17,6 +20,7 @@ const RegisterSchema = z.object({
 type RegisterType = z.infer<typeof RegisterSchema>
 
 export default function Register() {
+  const router = useRouter()
   const methods = useForm<RegisterType>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -34,7 +38,32 @@ export default function Register() {
       return
     }
 
-    // TODO: FetchAPI
+    const registerResponse = await fetchAPI<{ message?: string }>('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formsData.name,
+        email: formsData.email,
+        password: formsData.password,
+        repeatPassword: formsData.repeatPassword,
+      }),
+      credentials: 'include',
+    })
+    const { data } = registerResponse
+
+    if (data?.message && data?.message === 'Passwords Do Not Match') {
+      setError('repeatPassword', { message: 'As senhas não coincidem' })
+      return
+    }
+
+    if (data?.message && data?.message === 'Email Already Exists') {
+      setError('email', { message: 'Email já existente' })
+      return
+    }
+
+    router.push('/login')
   }
 
   return (
@@ -110,7 +139,7 @@ export default function Register() {
             </label>
             <input
               id="repeatPassword"
-              type="repeatPassword"
+              type="password"
               placeholder="Repita sua Senha"
               className="mt-1 h-10 w-full rounded-md bg-body px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary"
               {...register('repeatPassword')}
@@ -124,9 +153,10 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full rounded-md bg-primary px-4 py-2 text-neutral-50 hover:bg-secondary"
+            disabled={formState.isSubmitting}
+            className="loading w-full rounded-md bg-primary px-4 py-2 text-neutral-50 hover:bg-secondary"
           >
-            Entrar
+            Cadastrar
           </button>
 
           <a

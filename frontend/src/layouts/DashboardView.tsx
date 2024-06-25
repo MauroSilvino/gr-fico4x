@@ -3,11 +3,11 @@ import type { CandleData } from 'charts-api'
 
 import { CandleChart } from '@/components/CandleChart'
 
-interface HomeViewProps {
+interface DashboardViewProps {
   candleChartData: CandleData
 }
 
-export const HomeView = ({ candleChartData }: HomeViewProps) => {
+export const DashboardView = ({ candleChartData }: DashboardViewProps) => {
   return (
     <main>
       <h1 className="text-xl font-medium">Home</h1>

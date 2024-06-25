@@ -1,9 +1,12 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+
+import { fetchAPI } from '@/utils/fetchAPI'
 
 const LoginSchema = z.object({
   email: z
@@ -15,6 +18,7 @@ const LoginSchema = z.object({
 type LoginType = z.infer<typeof LoginSchema>
 
 export default function Login() {
+  const router = useRouter()
   const methods = useForm<LoginType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -25,7 +29,25 @@ export default function Login() {
   const { handleSubmit, formState, setError, register } = methods
 
   async function handleLogin(formsData: LoginType) {
-    // TODO: FetchAPI
+    const loginResponse = await fetchAPI<{ message?: string }>('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: formsData.email,
+        password: formsData.password,
+      }),
+      credentials: 'include',
+    })
+    const { data } = loginResponse
+
+    if (data?.message && data?.message === 'Invalid Credentials') {
+      setError('email', { message: 'Email ou senha inválidos' })
+      return
+    }
+
+    router.push('/dashboard')
   }
 
   return (
@@ -79,7 +101,8 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full rounded-md bg-primary px-4 py-2 text-neutral-50 hover:bg-secondary"
+            disabled={formState.isSubmitting}
+            className="loading w-full rounded-md bg-primary px-4 py-2 text-neutral-50 hover:bg-secondary"
           >
             Entrar
           </button>
