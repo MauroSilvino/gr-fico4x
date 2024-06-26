@@ -1,19 +1,20 @@
-import Fastify from "fastify";
-import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
+import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
 import fastifyRateLimit from "@fastify/rate-limit";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
+import Fastify from "fastify";
 import {
-  validatorCompiler,
-  serializerCompiler,
   jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
 } from "fastify-type-provider-zod";
 
-import { errorHandler } from "./error-handler";
-import { usersController } from "./controllers/users/router";
 import { chartsController } from "./controllers/charts/router";
+import { usersController } from "./controllers/users/router";
+import { errorHandler } from "./error-handler";
+import { updateDatabase } from "./jobs/cronjob";
 
 const app = Fastify({
   logger: true,
@@ -60,6 +61,7 @@ app.get("/", async (request, reply) => {
 app.register(usersController);
 app.register(chartsController);
 
+updateDatabase()
 try {
   await app.listen({
     host: "0.0.0.0",
