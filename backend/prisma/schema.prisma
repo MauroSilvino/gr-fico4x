@@ -14,3 +14,11 @@ model Users {
   password   String
   created_at DateTime @default(now())
 }
+
+model GraphicData {
+  id         String   @id @default(uuid())
+  value      Json
+  created_at DateTime @default(now())
+
+  @@index([value(ops: JsonbPathOps)], type: Gin)
+}
