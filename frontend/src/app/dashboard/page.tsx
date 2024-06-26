@@ -22,6 +22,7 @@ export default async function DashboardPage() {
   )
   if (!candleChartRes.data)
     return <h1>Ocorreu um erro. Tente novamente mais tarde...</h1>
+  if (candleChartRes.status !== 200) redirect('/login')
 
   const { candleChartData } = candleChartRes.data
 

@@ -6,7 +6,7 @@ import Link from 'next/link'
 export default function NotFound() {
   return (
     <main className="flex h-screen w-screen items-center">
-      <div className="mx-auto w-full max-w-sm rounded-md bg-background px-5 py-6">
+      <div className="mx-auto w-full max-w-sm rounded-md border border-neutral-300 bg-background-light px-5 py-6 shadow-md dark:border-neutral-800 dark:bg-background-dark">
         <img
           className="mx-auto mb-3 h-24 w-auto"
           src="/logo.svg"

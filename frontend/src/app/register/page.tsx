@@ -70,7 +70,7 @@ export default function Register() {
     <main className="flex h-screen w-screen items-center">
       <FormProvider {...methods}>
         <form
-          className="mx-auto w-full max-w-md rounded-md border border-neutral-300 bg-background px-3 py-4 shadow-md md:px-5 md:py-6"
+          className="mx-auto w-full max-w-md rounded-md border border-neutral-300 bg-background-light px-3 py-4 shadow-md md:px-5 md:py-6 dark:border-neutral-800 dark:bg-background-dark"
           onSubmit={handleSubmit(handleRegister)}
         >
           <img
@@ -87,7 +87,7 @@ export default function Register() {
               id="name"
               type="text"
               placeholder="Digite seu Nome"
-              className="mt-1 h-10 w-full rounded-md bg-body px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary"
+              className="mt-1 h-10 w-full rounded-md bg-body-light px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary dark:bg-body-dark"
               {...register('name')}
             />
             {formState.errors.name && (
@@ -105,7 +105,7 @@ export default function Register() {
               id="email"
               type="text"
               placeholder="Digite seu Email"
-              className="mt-1 h-10 w-full rounded-md bg-body px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary"
+              className="mt-1 h-10 w-full rounded-md bg-body-light px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary dark:bg-body-dark"
               {...register('email')}
             />
             {formState.errors.email && (
@@ -123,7 +123,7 @@ export default function Register() {
               id="password"
               type="password"
               placeholder="Digite sua Senha"
-              className="mt-1 h-10 w-full rounded-md bg-body px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary"
+              className="mt-1 h-10 w-full rounded-md bg-body-light px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary dark:bg-body-dark"
               {...register('password')}
             />
             {formState.errors.password && (
@@ -141,7 +141,7 @@ export default function Register() {
               id="repeatPassword"
               type="password"
               placeholder="Repita sua Senha"
-              className="mt-1 h-10 w-full rounded-md bg-body px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary"
+              className="mt-1 h-10 w-full rounded-md bg-body-light px-3 text-sm outline-none placeholder:text-neutral-400 focus:ring-2 focus:ring-primary dark:bg-body-dark"
               {...register('repeatPassword')}
             />
             {formState.errors.repeatPassword && (
@@ -160,7 +160,7 @@ export default function Register() {
           </button>
 
           <a
-            className="mt-4 block text-center text-xs text-neutral-500 hover:underline"
+            className="mt-4 block text-center text-xs text-neutral-500 hover:underline dark:text-neutral-300"
             href="/login"
           >
             Já está cadastrado ?

@@ -2,6 +2,7 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  darkMode: 'selector',
   theme: {
     extend: {
       fontFamily: {
@@ -11,12 +12,10 @@ const config: Config = {
       colors: {
         primary: '#298B3C',
         secondary: '#267a38',
-        body: '#fafafa',
-        background: '#e5e5e5',
-
-        /* Black Mode */
-        // body: '#1a1a1a',
-        // background: '#1e1e1e',
+        'body-light': '#fafafa',
+        'background-light': '#e5e5e5',
+        'body-dark': '#1a1a1a',
+        'background-dark': '#1e1e1e',
       },
     },
     screens: {
