@@ -10,10 +10,7 @@ interface DashboardViewProps {
 export const DashboardView = ({ candleChartData }: DashboardViewProps) => {
   return (
     <main>
-      <h1 className="text-xl font-medium">Home</h1>
-      <div>
-        <CandleChart candleChartData={candleChartData} />
-      </div>
+      <CandleChart candleChartData={candleChartData} />
     </main>
   )
 }
