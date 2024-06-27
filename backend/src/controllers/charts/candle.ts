@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import axios from "axios";
 import { z } from "zod";
+
+import { prisma } from "../../lib/prisma";
 
 type CandleResponseType = {
   metadata: {
@@ -17,17 +18,25 @@ export async function candleChartData(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const candleEndpointAPI =
-    "https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=EUR&to_symbol=USD&interval=5min&apikey=demo";
-
-  const externalApiResponse = await axios.get(candleEndpointAPI, {
-    headers: { Accept: "application/json" },
+  const candleChart = await prisma.candleChart.findFirst({
+    select: {
+      id: true,
+      value: true,
+      created_at: true,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
   });
-  const externalApiData: CandleResponseType = externalApiResponse.data;
+  if (!candleChart)
+    return reply.status(400).send({ message: "No Chart Data Found" });
 
+  const candleChartObj = candleChart.value as CandleResponseType;
+
+  // Transformação de dados para o formato necessário
   const candleChartData = {
-    metadata: { ...externalApiData["Meta Data"] },
-    data: Object.entries(externalApiData["Time Series FX (5min)"]).map(
+    metadata: { ...candleChartObj["Meta Data"] },
+    data: Object.entries(candleChartObj["Time Series FX (5min)"]).map(
       (obj) => ({
         [obj[0]]: obj[1],
       })

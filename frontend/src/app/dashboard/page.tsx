@@ -10,21 +10,30 @@ export default async function DashboardPage() {
   const token = cookies().get('grafico_user')?.value
   if (!token) redirect('/login')
 
-  const candleChartRes = await fetchAPI<{ candleChartData: CandleData }>(
-    '/candle',
-    {
-      next: { tags: ['update-candle-data'] },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+  const candleChartRes = await fetchAPI<{
+    candleChartData?: CandleData
+    message?: string
+  }>('/candle', {
+    next: { tags: ['update-candle-data'] },
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
     },
-  )
+  })
   if (!candleChartRes.data)
     return <h1>Ocorreu um erro. Tente novamente mais tarde...</h1>
-  if (candleChartRes.status !== 200) redirect('/login')
+  if (
+    candleChartRes.data.message &&
+    candleChartRes.data.message === 'No Chart Data Found'
+  )
+    return (
+      <h1>
+        Não há dados disponíveis no momento. Tente novamente mais tarde...
+      </h1>
+    )
 
-  const { candleChartData } = candleChartRes.data
+  const candleChartData = candleChartRes.data.candleChartData
+  if (!candleChartData) redirect('/login')
 
   return <DashboardView candleChartData={candleChartData} />
 }

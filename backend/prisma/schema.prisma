@@ -15,7 +15,7 @@ model Users {
   created_at DateTime @default(now())
 }
 
-model GraphicData {
+model CandleChart {
   id         String   @id @default(uuid())
   value      Json
   created_at DateTime @default(now())

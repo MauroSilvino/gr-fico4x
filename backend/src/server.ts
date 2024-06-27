@@ -14,7 +14,7 @@ import {
 import { chartsController } from "./controllers/charts/router";
 import { usersController } from "./controllers/users/router";
 import { errorHandler } from "./error-handler";
-import { updateDatabase } from "./jobs/cronjob";
+import { updateCandleChart } from "./jobs/cronjob";
 
 const app = Fastify({
   logger: true,
@@ -61,7 +61,8 @@ app.get("/", async (request, reply) => {
 app.register(usersController);
 app.register(chartsController);
 
-updateDatabase()
+updateCandleChart();
+
 try {
   await app.listen({
     host: "0.0.0.0",
