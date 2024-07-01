@@ -11,10 +11,9 @@ import {
   validatorCompiler,
 } from "fastify-type-provider-zod";
 
-import { chartsController } from "./controllers/charts/router";
-import { usersController } from "./controllers/users/router";
 import { errorHandler } from "./error-handler";
-import { updateCandleChart } from "./jobs/cronjob";
+import { websocket } from "./services/websocket";
+import { usersController } from "./controllers/users/router";
 
 const app = Fastify({
   logger: true,
@@ -59,9 +58,8 @@ app.get("/", async (request, reply) => {
 
 /* Controllers */
 app.register(usersController);
-app.register(chartsController);
 
-updateCandleChart();
+app.register(websocket);
 
 try {
   await app.listen({
