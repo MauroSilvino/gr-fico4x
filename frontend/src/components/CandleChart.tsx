@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
-import dynamic from 'next/dynamic'
-import type { CandleData } from 'charts-api'
 import type { ApexOptions } from 'apexcharts'
+import type { CandleData } from 'charts-api'
+import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
@@ -12,12 +12,17 @@ interface CandleChartProps {
 }
 
 export const CandleChart = ({ candleChartData }: CandleChartProps) => {
+  const [annotations, setAnnotations] = useState<ApexAnnotations>({
+    xaxis: [],
+    yaxis: [],
+  })
+
   const seriesData = candleChartData.data?.map((obj) => {
     const objKey = Object.keys(obj)[0]
-    const values = Object.values(obj[objKey]).map(Number) // Convertendo para números
+    const values = Object.values(obj[objKey]).map(Number)
     return {
       x: new Date(objKey).toISOString(),
-      y: values as [number, number, number, number], // Asserting the type
+      y: values as [number, number, number, number],
     }
   })
 
@@ -36,7 +41,7 @@ export const CandleChart = ({ candleChartData }: CandleChartProps) => {
       type: 'datetime',
     },
     grid: {
-      borderColor: 'rgba(114, 100, 100, 0.22)', // Define as linhas horizontais quase transparentes
+      borderColor: 'rgba(114, 100, 100, 0.22)',
     },
     yaxis: {
       labels: {
@@ -45,7 +50,71 @@ export const CandleChart = ({ candleChartData }: CandleChartProps) => {
         },
       },
     },
+    annotations: annotations,
   }
+
+  const mark = (position: 'above' | 'below') => {
+    const latestData = seriesData[0]
+    const newAnnotation = {
+      x: latestData.x,
+      y: latestData.y[3],
+      borderColor: position === 'above' ? 'green' : 'red',
+      label: {
+        borderColor: position === 'above' ? 'green' : 'red',
+        style: {
+          color: '#fff',
+          background: position === 'above' ? 'green' : 'red',
+        },
+        text: position === 'above' ? 'Acima' : 'Abaixo',
+      },
+    }
+    setAnnotations((prev) => ({
+      xaxis: [...(prev.xaxis || []), newAnnotation],
+      yaxis: [...(prev.yaxis || []), newAnnotation],
+    }))
+
+    const markedData = []
+    // @ts-expect-error
+    const data = JSON.parse(localStorage.getItem('mark'))
+    if (!data) {
+      markedData.push(newAnnotation)
+      localStorage.setItem('mark', JSON.stringify(markedData))
+    } else {
+      markedData.push(...data)
+      markedData.push(newAnnotation)
+      localStorage.setItem('mark', JSON.stringify(markedData))
+    }
+  }
+
+  useEffect(() => {
+    // @ts-ignore
+    let markedData = JSON.parse(localStorage.getItem('mark'))
+
+    if (!markedData) {
+      return
+    }
+
+    // @ts-ignore
+    markedData.forEach((element) => {
+      const anotation = {
+        x: element.x,
+        y: element.y,
+        borderColor: element.borderColor,
+        label: {
+          borderColor: element.label.borderColor,
+          style: {
+            color: element.label.style.color,
+            background: element.label.style.background,
+          },
+          text: element.label.text,
+        },
+      }
+      setAnnotations((prev) => ({
+        xaxis: [...(prev.xaxis || []), anotation],
+        yaxis: [...(prev.yaxis || []), anotation],
+      }))
+    })
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-800 p-4">
@@ -58,7 +127,10 @@ export const CandleChart = ({ candleChartData }: CandleChartProps) => {
           options={options}
         />
         <div className="absolute right-4 top-1/2 flex -translate-y-1/2 transform flex-col items-center space-y-5">
-          <button className="z-10 box-border flex h-32 w-32 flex-col items-center justify-center rounded-md bg-green-500 p-4 text-center">
+          <button
+            className="z-10 box-border flex h-32 w-32 flex-col items-center justify-center rounded-md bg-green-500 p-4 text-center"
+            onClick={() => mark('above')}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -75,7 +147,10 @@ export const CandleChart = ({ candleChartData }: CandleChartProps) => {
             </svg>
             <p className="text-xl">Acima</p>
           </button>
-          <button className="z-0 box-border flex h-32 w-32 flex-col items-center justify-center rounded-md bg-red-500 p-4 text-center">
+          <button
+            className="z-0 box-border flex h-32 w-32 flex-col items-center justify-center rounded-md bg-red-500 p-4 text-center"
+            onClick={() => mark('below')}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
