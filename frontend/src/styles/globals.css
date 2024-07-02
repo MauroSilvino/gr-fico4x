@@ -38,3 +38,8 @@ html {
     transform: rotate(1turn);
   }
 }
+
+.apexcharts-tooltip {
+  background-color: #1e2e43  !important;
+  border: 2px solid #768599 !important;
+}
