@@ -122,52 +122,66 @@ export const CandleChart = ({
   return (
     <div className="min-h-screen bg-gray-800 p-4">
       <div className="relative rounded-lg bg-gray-800 p-4">
-        <Chart
-          type="candlestick"
-          series={series}
-          height={880}
-          width="90%"
-          options={options}
-          className="w-full"
-        />
-        <div className="absolute left-4 top-4 z-10 flex space-x-4">
-          {/* Botões na parte superior esquerdo */}
+        
+          <Chart
+            type="candlestick"
+            series={series}
+            height="560%"
+            width="90%"
+            options={options}
+            className="w-full"
+          />
+        
+
+        <div className="absolute left-4 top-4 z-10 flex flex-wrap space-x-4 shrink md:shrink-10 md:flex-row md:space-x-4 md:space-y-0 flex-col space-y-4">
+          {/* Botões na parte superior esquerda */}
           <button
-            className="flex items-center justify-center rounded-md bg-gray-700 px-4 py-2 text-white hover:bg-gray-600"
+            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
             type="button"
             onClick={() => setCurrency('EUR_USD')}
           >
+            <img src="./european_flag.png" alt="icon european flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
+            <img src="./us_flag.png" alt=" icon american flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
             EUR/USD
           </button>
           <button
-            className="flex items-center justify-center rounded-md bg-gray-700 px-4 py-2 text-white hover:bg-gray-600"
+            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
             type="button"
             onClick={() => setCurrency('GBP_JPY')}
           >
+            <img src="./european_flag.png" alt="icon european flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
+            <img src="./japan_flag.png" alt=" icon japanese flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
             EUR/JPY
           </button>
           <button
-            className="flex items-center justify-center rounded-md bg-gray-700 px-4 py-2 text-white hover:bg-gray-600"
+            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
             type="button"
             onClick={() => setCurrency('USD_BRL')}
           >
+            <img src="./european_flag.png" alt="icon european flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
+            <img src="./br_flag.png" alt="icon brazilian flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
             USD/BRL
           </button>
           <button
-            className="flex items-center justify-center rounded-md bg-gray-700 px-4 py-2 text-white hover:bg-gray-600"
+            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
             type="button"
             onClick={() => setCurrency('USD_CAD')}
           >
+            <img src="./us_flag.png" alt="icon american flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
+            <img src="./ca_flag.png" alt="icon canadian flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
             USD/CAD
           </button>
           <button
-            className="flex items-center justify-center rounded-md bg-gray-700 px-4 py-2 text-white hover:bg-gray-600"
+            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
             type="button"
             onClick={() => setCurrency('GBP_JPY')}
           >
+            <img src="./uk_flag.png" alt="icon united kingdom flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
+            <img src="./japan_flag.png" alt="icon japanese flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
             GBP/JPY
           </button>
         </div>
+
         <div className="absolute right-4 top-1/2 flex -translate-y-1/2 transform flex-col items-center space-y-5">
           {/* Botões na lateral direita */}
           <button
