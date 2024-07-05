@@ -39,7 +39,13 @@ html {
   }
 }
 
-.apexcharts-tooltip {
-  background-color: #1e2e43  !important;
-  border: 2px solid #768599 !important;
+.apexcharts-tooltip,
+.apexcharts-menu {
+  background-color: #1e2e43 !important;
+  border: 1px solid #374151 !important;
+  box-shadow: none !important;
+}
+
+.apexcharts-menu-item:hover {
+  background-color: #374151 !important;
 }

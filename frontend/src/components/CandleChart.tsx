@@ -120,72 +120,140 @@ export const CandleChart = ({
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-800 p-4">
-      <div className="relative rounded-lg bg-gray-800 p-4">
-        
+    <div className="min-h-screen bg-gray-800 p-2 md:px-4 md:py-3">
+      {/* Botões para trocar as moedas */}
+      <div className="inline-flex flex-wrap gap-1 md:mx-3 md:gap-3">
+        <button
+          className="inline-flex items-center rounded-md border border-gray-700 px-2 py-2 transition-all hover:bg-gray-700 md:px-3"
+          type="button"
+          onClick={() => setCurrency('EUR_USD')}
+        >
+          <div className="relative mr-1 block size-6">
+            <img
+              className="absolute bottom-1.5 right-1.5 block size-5"
+              width={20}
+              height={20}
+              src="./european_flag.png"
+              alt="EUR flag"
+            />
+            <img
+              className="absolute left-1.5 top-1.5 z-[2] block size-5"
+              width={20}
+              height={20}
+              src="./us_flag.png"
+              alt="US flag"
+            />
+          </div>
+          <span className="text-xs text-white md:text-sm">EUR/USD</span>
+        </button>
+        <button
+          className="inline-flex items-center rounded-md border border-gray-700 px-2 py-2 transition-all hover:bg-gray-700 md:px-3"
+          type="button"
+          onClick={() => setCurrency('EUR_JPY')}
+        >
+          <div className="relative mr-1 block size-6">
+            <img
+              className="absolute bottom-1.5 right-1.5 block size-5"
+              width={20}
+              height={20}
+              src="./european_flag.png"
+              alt="EUR flag"
+            />
+            <img
+              className="absolute left-1.5 top-1.5 z-[2] block size-5"
+              width={20}
+              height={20}
+              src="./japan_flag.png"
+              alt="JPY flag"
+            />
+          </div>
+          <span className="text-xs text-white md:text-sm">EUR/JPY</span>
+        </button>
+        <button
+          className="inline-flex items-center rounded-md border border-gray-700 px-2 py-2 transition-all hover:bg-gray-700 md:px-3"
+          type="button"
+          onClick={() => setCurrency('USD_BRL')}
+        >
+          <div className="relative mr-1 block size-6">
+            <img
+              className="absolute bottom-1.5 right-1.5 block size-5"
+              width={20}
+              height={20}
+              src="./us_flag.png"
+              alt="US flag"
+            />
+            <img
+              className="absolute left-1.5 top-1.5 z-[2] block size-5"
+              width={20}
+              height={20}
+              src="./br_flag.png"
+              alt="BR flag"
+            />
+          </div>
+          <span className="text-xs text-white md:text-sm">USD/BRL</span>
+        </button>
+        <button
+          className="inline-flex items-center rounded-md border border-gray-700 px-2 py-2 transition-all hover:bg-gray-700 md:px-3"
+          type="button"
+          onClick={() => setCurrency('USD_CAD')}
+        >
+          <div className="relative mr-1 block size-6">
+            <img
+              className="absolute bottom-1.5 right-1.5 block size-5"
+              width={20}
+              height={20}
+              src="./us_flag.png"
+              alt="US flag"
+            />
+            <img
+              className="absolute left-1.5 top-1.5 z-[2] block size-5"
+              width={20}
+              height={20}
+              src="./ca_flag.png"
+              alt="CAD flag"
+            />
+          </div>
+          <span className="text-xs text-white md:text-sm">USD/CAD</span>
+        </button>
+        <button
+          className="inline-flex items-center rounded-md border border-gray-700 px-2 py-2 transition-all hover:bg-gray-700 md:px-3"
+          type="button"
+          onClick={() => setCurrency('GBP_JPY')}
+        >
+          <div className="relative mr-1 block size-6">
+            <img
+              className="absolute bottom-1.5 right-1.5 block size-5"
+              width={20}
+              height={20}
+              src="./uk_flag.png"
+              alt="GBP flag"
+            />
+            <img
+              className="absolute left-1.5 top-1.5 z-[2] block size-5"
+              width={20}
+              height={20}
+              src="./japan_flag.png"
+              alt="JPY flag"
+            />
+          </div>
+          <span className="text-xs text-white md:text-sm">GBP/JPY</span>
+        </button>
+      </div>
+      <div className="flex rounded-lg bg-gray-800">
+        <div className="h-[90vh] grow">
           <Chart
             type="candlestick"
             series={series}
-            height="560%"
-            width="90%"
+            height="100%"
+            width="100%"
             options={options}
-            className="w-full"
           />
-        
-
-        <div className="absolute left-4 top-4 z-10 flex flex-wrap space-x-4 shrink md:shrink-10 md:flex-row md:space-x-4 md:space-y-0 flex-col space-y-4">
-          {/* Botões na parte superior esquerda */}
-          <button
-            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
-            type="button"
-            onClick={() => setCurrency('EUR_USD')}
-          >
-            <img src="./european_flag.png" alt="icon european flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            <img src="./us_flag.png" alt=" icon american flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            EUR/USD
-          </button>
-          <button
-            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
-            type="button"
-            onClick={() => setCurrency('GBP_JPY')}
-          >
-            <img src="./european_flag.png" alt="icon european flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            <img src="./japan_flag.png" alt=" icon japanese flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            EUR/JPY
-          </button>
-          <button
-            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
-            type="button"
-            onClick={() => setCurrency('USD_BRL')}
-          >
-            <img src="./european_flag.png" alt="icon european flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            <img src="./br_flag.png" alt="icon brazilian flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            USD/BRL
-          </button>
-          <button
-            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
-            type="button"
-            onClick={() => setCurrency('USD_CAD')}
-          >
-            <img src="./us_flag.png" alt="icon american flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            <img src="./ca_flag.png" alt="icon canadian flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            USD/CAD
-          </button>
-          <button
-            className="flex items-center rounded-md bg-gray-700 px-4 py-2 md:px-2 md:py-1 text-white hover:bg-gray-600"
-            type="button"
-            onClick={() => setCurrency('GBP_JPY')}
-          >
-            <img src="./uk_flag.png" alt="icon united kingdom flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            <img src="./japan_flag.png" alt="icon japanese flag" className="w-6 h-6 mr-3 md:w-4 md:h-4" />
-            GBP/JPY
-          </button>
         </div>
 
-        <div className="absolute right-4 top-1/2 flex -translate-y-1/2 transform flex-col items-center space-y-5">
-          {/* Botões na lateral direita */}
+        {/* Botões na lateral direita */}
+        <div className="flex w-[4.5rem] flex-col items-end justify-center gap-2 lg:w-28">
           <button
-            className="z-10 box-border flex h-16 w-16 flex-col items-center justify-center rounded-md bg-green-500 p-2 text-center hover:bg-green-600 lg:h-24 lg:w-24 lg:p-4"
+            className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-green-600 p-2 text-center transition-all hover:bg-green-700 lg:h-24 lg:w-24 lg:p-4"
             type="button"
             onClick={() => mark('above')}
           >
@@ -205,9 +273,8 @@ export const CandleChart = ({
             </svg>
             <p className="text-xs lg:text-lg">Comprar</p>
           </button>
-
           <button
-            className="z-0 box-border flex h-16 w-16 flex-col items-center justify-center rounded-md bg-red-500 p-2 text-center hover:bg-red-600 lg:h-24 lg:w-24 lg:p-4"
+            className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-red-600 p-2 text-center transition-all hover:bg-red-900 lg:h-24 lg:w-24 lg:p-4"
             type="button"
             onClick={() => mark('below')}
           >
