@@ -14,8 +14,8 @@ const config: Config = {
         secondary: '#267a38',
         'body-light': '#fafafa',
         'background-light': '#e5e5e5',
-        'body-dark': '#1a1a1a',
-        'background-dark': '#1e1e1e',
+        'body-dark': '#111827',
+        'background-dark': '#1f2937',
       },
     },
     screens: {

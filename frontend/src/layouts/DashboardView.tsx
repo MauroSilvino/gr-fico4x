@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import type { CandleData } from 'charts-api'
 
 import { CandleChart } from '@/components/CandleChart'
@@ -13,23 +13,29 @@ export const DashboardView = () => {
     null,
   )
 
-  useEffect(() => {
+  const handleWebSocket = useCallback((currency: Currency) => {
     const ws = new WebSocket('ws://localhost:8080')
 
-    ws.onopen = async function () {
+    ws.onopen = async () => {
       ws.send(JSON.stringify(currency))
     }
 
-    ws.onmessage = function (msg) {
+    ws.onmessage = (msg) => {
       const candleData = JSON.parse(msg.data)
       setCandleChartData(candleData)
     }
+  }, [])
 
-    // Update Chart every minute
-    setInterval(async () => {
-      ws.send(JSON.stringify(currency))
+  useEffect(() => {
+    handleWebSocket(currency)
+
+    // Clear last interval
+    const intervalId = setInterval(async () => {
+      handleWebSocket(currency)
     }, 1000 * 60) // 60 seconds
-  }, [currency])
+
+    return () => clearInterval(intervalId)
+  }, [handleWebSocket, currency])
 
   return (
     <main>

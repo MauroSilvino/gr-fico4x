@@ -54,7 +54,7 @@ export default function Login() {
     <main className="flex h-screen w-screen items-center">
       <FormProvider {...methods}>
         <form
-          className="mx-auto w-full max-w-md rounded-md border border-neutral-300 bg-background-light px-3 py-4 shadow-md md:px-5 md:py-6 dark:border-neutral-800 dark:bg-background-dark"
+          className="mx-auto w-full max-w-md rounded-md border border-neutral-300 bg-background-light px-3 py-4 shadow-md md:px-5 md:py-6 dark:border-gray-700 dark:bg-background-dark"
           onSubmit={handleSubmit(handleLogin)}
         >
           <img
