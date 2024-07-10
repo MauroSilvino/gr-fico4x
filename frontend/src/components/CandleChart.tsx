@@ -22,7 +22,6 @@ export const CandleChart = ({ candleChartData }: CandleChartProps) => {
       y: values as [number, number, number, number], // Números das velas (open, high, low, close)
     }
   })
-
   const series = [
     {
       name: 'candle',
@@ -34,22 +33,47 @@ export const CandleChart = ({ candleChartData }: CandleChartProps) => {
     chart: {
       type: 'candlestick',
     },
-    colors: ['#3B82F6'],
+    colors: ['#6b7280'],
+    grid: {
+      borderColor: 'rgba(75, 85, 99, 0.10)', // Linhas horizontais quase transparentes
+    },
     xaxis: {
       type: 'datetime',
-    },
-    grid: {
-      borderColor: 'rgba(114, 100, 100, 0.22)', // Linhas horizontais quase transparentes
+      tooltip: {
+        formatter: function (value: string) {
+          const date = new Date(value)
+
+          return date.toLocaleString('pt-BR')
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+      labels: {
+        style: {
+          colors: ['#6b7280'],
+        },
+      },
     },
     yaxis: {
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
       labels: {
-        formatter: function (value: number) {
-          return value.toFixed(2)
+        style: {
+          colors: ['#6b7280'],
         },
       },
     },
     annotations: annotations,
   }
+
   function onMark(position: 'above' | 'below') {
     const latestData = seriesData[0]
 

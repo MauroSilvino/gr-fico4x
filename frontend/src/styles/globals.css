@@ -40,7 +40,8 @@ html {
 }
 
 .apexcharts-tooltip,
-.apexcharts-menu {
+.apexcharts-menu,
+.apexcharts-xaxistooltip {
   background-color: #1e2e43 !important;
   border: 1px solid #374151 !important;
   box-shadow: none !important;
@@ -48,4 +49,25 @@ html {
 
 .apexcharts-menu-item:hover {
   background-color: #374151 !important;
+}
+
+.apexcharts-xaxistooltip {
+  color: #f3f4f6 !important;
+}
+.apexcharts-xaxistooltip-bottom:before {
+  border-bottom-color: #374151 !important;
+}
+.apexcharts-xaxistooltip-bottom:after {
+  border-bottom-color: #1e2e43 !important;
+}
+
+tspan {
+  fill: #6b7280;
+}
+
+.apexcharts-toolbar > div:not(.apexcharts-menu) {
+  color: #6b7280;
+}
+.apexcharts-toolbar > div:hover > svg {
+  fill: #4b5563 !important;
 }
