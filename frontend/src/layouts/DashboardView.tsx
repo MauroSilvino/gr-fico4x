@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import type { CandleData } from 'charts-api'
 
 import { CandleChart } from '@/components/CandleChart'
+import { CurrencySelector } from '@/components/CurrencySelector'
 
 export type Currency = 'EUR_USD' | 'EUR_JPY' | 'USD_BRL' | 'USD_CAD' | 'GBP_JPY'
 
@@ -40,10 +41,10 @@ export const DashboardView = () => {
   return (
     <main>
       {candleChartData && (
-        <CandleChart
-          candleChartData={candleChartData}
-          setCurrency={setCurrency}
-        />
+        <div className="min-h-screen bg-gray-800 p-2 md:px-4 md:py-3">
+          <CurrencySelector setCurrency={setCurrency} />
+          <CandleChart candleChartData={candleChartData} />
+        </div>
       )}
       {!candleChartData && <h1>Carregando...</h1>}
     </main>
