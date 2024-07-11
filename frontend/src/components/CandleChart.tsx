@@ -12,6 +12,8 @@ interface CandleChartProps {
 export const CandleChart = ({ candleChartData }: CandleChartProps) => {
   const [annotations, setAnnotations] = useState<ApexAnnotations>({
     yaxis: [],
+    xaxis: [],
+    points: [],
   })
 
   const seriesData = candleChartData.data?.map((obj) => {
@@ -76,37 +78,75 @@ export const CandleChart = ({ candleChartData }: CandleChartProps) => {
 
   function onMark(position: 'above' | 'below') {
     const latestData = seriesData[0]
+    const color = position === 'above' ? '#16a34a' : '#dc2626'
 
+    const newXAxisAnnotation = {
+      x: new Date(seriesData[0].x).getTime(),
+      borderColor: color,
+    } as XAxisAnnotations
     const newYAxisAnnotation = {
-      x: latestData.x,
       y: latestData.y[3],
-      borderColor: position === 'above' ? 'green' : 'red',
+      borderColor: color,
       label: {
-        borderColor: position === 'above' ? 'green' : 'red',
+        borderColor: color,
         style: {
           color: '#fff',
-          background: position === 'above' ? 'green' : 'red',
+          background: color,
         },
-        text: position === 'above' ? 'Acima' : 'Abaixo',
+        text: latestData.y[3].toString(),
+        position: 'left',
       },
-    }
-    setAnnotations((prev) => ({
-      yaxis: [...(prev.yaxis || []), newYAxisAnnotation],
-    }))
+    } as YAxisAnnotations
+    const newPointAnnotation = {
+      x: new Date(seriesData[0].x).getTime(),
+      y: seriesData[0].y[3],
+      marker: {
+        size: 6,
+        fillColor: color,
+        strokeColor: '#fff',
+        strokeWidth: 1,
+      },
+      // label: {
+      //   borderColor: color,
+      //   text: new Date(seriesData[0].x).getTime().toString(),
+      // },
+    } as PointAnnotations
 
-    /* Save Markers on Local Storage */
-    const storageMarkers = JSON.parse(
-      localStorage.getItem('grafico_mark') ?? '[]',
-    )
-    const markers = [...storageMarkers, newYAxisAnnotation]
-    localStorage.setItem('grafico_mark', JSON.stringify(markers))
+    const newAnnotation = {
+      xaxis: annotations.xaxis
+        ? [...annotations.xaxis, newXAxisAnnotation]
+        : [newXAxisAnnotation],
+      yaxis: annotations.yaxis
+        ? [...annotations.yaxis, newYAxisAnnotation]
+        : [newYAxisAnnotation],
+      points: annotations.points
+        ? [...annotations.points, newPointAnnotation]
+        : [newPointAnnotation],
+    }
+    setAnnotations(newAnnotation)
+
+    /* Get Local Storage Markers */
+    const storageObjStringified = localStorage.getItem('grafico_mark')
+    /* Save Markers on Local Storage (No Previous annotation) */
+    if (!storageObjStringified)
+      localStorage.setItem('grafico_mark', JSON.stringify(newAnnotation))
+
+    /* Save Markers on Local Storage (With Previous annotation) */
+    if (storageObjStringified) {
+      const storageObj = JSON.parse(storageObjStringified)
+      const newObj = {
+        xaxis: [...newAnnotation.xaxis, ...storageObj.xaxis],
+        yaxis: [...newAnnotation.yaxis, ...storageObj.yaxis],
+        points: [...newAnnotation.points, ...storageObj.points],
+      }
+      localStorage.setItem('grafico_mark', JSON.stringify(newObj))
+    }
   }
 
   useEffect(() => {
-    const markers = JSON.parse(localStorage.getItem('grafico_mark') ?? '[]')
-    setAnnotations(() => ({
-      yaxis: markers,
-    }))
+    const hasStorageMarkers = localStorage.getItem('grafico_mark')
+    const markers = hasStorageMarkers ? JSON.parse(hasStorageMarkers) : null
+    if (markers) setAnnotations(markers)
   }, [])
 
   return (

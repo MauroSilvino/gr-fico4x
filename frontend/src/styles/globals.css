@@ -71,3 +71,22 @@ tspan {
 .apexcharts-toolbar > div:hover > svg {
   fill: #4b5563 !important;
 }
+
+/* Apex Point Annotations */
+.apexcharts-point-annotations > rect {
+  fill: #1e2e43;
+  /* display: none; */
+}
+.apexcharts-point-annotations > text {
+  fill: #6b7280;
+  /* display: none; */
+}
+.apexcharts-point-annotations > circle:hover + rect {
+  display: none !important;
+}
+
+.apexcharts-yaxis-annotations > * {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
