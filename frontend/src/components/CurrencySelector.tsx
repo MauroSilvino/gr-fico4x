@@ -58,8 +58,8 @@ export const CurrencySelector = ({ setCurrency }: CurrencySelectorProps) => {
           </button>
         </Dialog.Trigger>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-[98] bg-[rgba(0,0,0,.75)]" />
-          <Dialog.Content className="fixed left-[50%] top-[50%] z-[99] max-h-[85vh] w-[96vw] max-w-md translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-800 px-3 py-3 focus:outline-none md:px-6 md:py-4">
+          <Dialog.Overlay className="fixed inset-0 z-[98] bg-[rgba(0,0,0,.50)]" />
+          <Dialog.Content className="fixed left-2 top-16 z-[99] max-h-[85vh] w-[96vw] max-w-md rounded-md bg-gray-800 px-3 py-3 focus:outline-none md:left-4 md:px-6 md:py-4">
             <Dialog.Title className="text-lg font-medium">
               Escolha uma moeda
             </Dialog.Title>

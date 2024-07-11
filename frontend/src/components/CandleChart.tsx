@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic'
 import React, { useEffect, useState } from 'react'
 import type { CandleData } from 'charts-api'
 import type { ApexOptions } from 'apexcharts'
+import { TrendingDown, TrendingUp } from 'lucide-react'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
@@ -10,6 +11,7 @@ interface CandleChartProps {
 }
 
 export const CandleChart = ({ candleChartData }: CandleChartProps) => {
+  const [entryValue, setEntryValue] = useState(1)
   const [annotations, setAnnotations] = useState<ApexAnnotations>({
     yaxis: [],
     xaxis: [],
@@ -161,47 +163,50 @@ export const CandleChart = ({ candleChartData }: CandleChartProps) => {
         />
       </div>
       <div className="flex w-[4.5rem] flex-col items-end justify-center gap-2 lg:w-28">
+        <div className="ml-4 rounded-md border border-[#4b5563] border-opacity-30 bg-[#1e2e43] px-3 py-2">
+          <label
+            htmlFor="value"
+            className="text-base font-medium text-[#6b7280]"
+          >
+            Valor
+          </label>
+          <div className="inline-flex items-center gap-2">
+            <span className="text-lg text-[#6b7280]">$</span>
+            <input
+              id="value"
+              type="number"
+              className="w-full rounded-md bg-[#1e2e43] px-1 text-base outline-none focus:ring-1 focus:ring-[#6b7280] focus:ring-opacity-40 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              value={entryValue}
+              onChange={(event) => setEntryValue(Number(event.target.value))}
+            />
+          </div>
+        </div>
+        <div className="ml-4 flex w-full flex-col p-2">
+          <span className="text-center text-xs text-[#eee] md:text-sm">
+            Lucro
+          </span>
+          <span className="my-1 block text-center text-xl text-green-600 md:text-2xl lg:text-3xl xl:text-4xl">
+            +85%
+          </span>
+          <span className="text-center text-base font-bold text-green-600 md:text-lg">
+            +{(entryValue * 0.85).toFixed(2)}
+          </span>
+        </div>
         <button
           className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-green-600 p-2 text-center transition-all hover:bg-green-700 lg:h-24 lg:w-24 lg:p-4"
           type="button"
           onClick={() => onMark('above')}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2.5"
-            stroke="currentColor"
-            className="h-6 w-6 lg:h-8 lg:w-8"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
-            />
-          </svg>
-          <p className="text-xs lg:text-lg">Comprar</p>
+          <TrendingUp className="size-6 lg:size-7" />
+          <p className="text-xs lg:text-lg">Acima</p>
         </button>
         <button
           className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-red-600 p-2 text-center transition-all hover:bg-red-900 lg:h-24 lg:w-24 lg:p-4"
           type="button"
           onClick={() => onMark('below')}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2.5"
-            stroke="currentColor"
-            className="h-6 w-6 lg:h-8 lg:w-8"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181"
-            />
-          </svg>
-          <p className="text-xs lg:text-lg">Vender</p>
+          <TrendingDown className="size-6 lg:size-7" />
+          <p className="text-xs lg:text-lg">Abaixo</p>
         </button>
       </div>
     </div>
