@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import type { CandleData } from 'charts-api'
+import { toast } from 'react-toastify'
 
 import { CandleChart } from './CandleChart'
 import { AsideBar } from './AsideBar'
@@ -7,11 +8,13 @@ import { AsideBar } from './AsideBar'
 interface CandleChartProps {
   candleChartData: CandleData
   userBalance: number
+  handleEntry(entryValue: number): Promise<boolean>
 }
 
 export const ChartWrapper = ({
   candleChartData,
   userBalance,
+  handleEntry,
 }: CandleChartProps) => {
   const [annotations, setAnnotations] = useState<ApexAnnotations>({
     yaxis: [],
@@ -28,7 +31,18 @@ export const ChartWrapper = ({
     }
   })
 
-  function onMark(position: 'above' | 'below') {
+  async function onMark(position: 'above' | 'below', entry: number) {
+    if (entry > userBalance) {
+      toast.info('Saldo insuficiente')
+      return
+    }
+
+    const handleEntryResponse = await handleEntry(entry)
+    if (!handleEntryResponse) {
+      toast.error('Ocorreu um erro. Tente novamente mais tarde...')
+      return
+    }
+
     const latestData = seriesData[0]
     const color = position === 'above' ? '#16a34a' : '#dc2626'
 
@@ -58,10 +72,10 @@ export const ChartWrapper = ({
         strokeColor: '#fff',
         strokeWidth: 1,
       },
-      // label: {
-      //   borderColor: color,
-      //   text: new Date(seriesData[0].x).getTime().toString(),
-      // },
+      label: {
+        borderColor: color,
+        text: `$${entry}`,
+      },
     } as PointAnnotations
 
     const newAnnotation = {

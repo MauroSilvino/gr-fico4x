@@ -39,6 +39,7 @@ html {
   }
 }
 
+/* Apexcharts */
 .apexcharts-tooltip,
 .apexcharts-menu,
 .apexcharts-xaxistooltip {
@@ -72,21 +73,25 @@ tspan {
   fill: #4b5563 !important;
 }
 
-/* Apex Point Annotations */
-.apexcharts-point-annotations > rect {
-  fill: #1e2e43;
-  /* display: none; */
-}
-.apexcharts-point-annotations > text {
-  fill: #6b7280;
-  /* display: none; */
-}
-.apexcharts-point-annotations > circle:hover + rect {
-  display: none !important;
-}
-
+/* Apexcharts Y Axis animation */
 .apexcharts-yaxis-annotations > * {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+/* Apexcharts Point Annotations */
+.apexcharts-point-annotations > rect {
+  fill: #1e2e43;
+  /* display: none; */
+}
+/* .apexcharts-point-annotations:hover > rect {
+  display: block !important;
+} */
+.apexcharts-point-annotations > text {
+  fill: #f3f4f6;
+  /* display: none; */
+}
+/* .apexcharts-point-annotations:hover > text {
+  display: block !important;
+} */

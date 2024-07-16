@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { TrendingDown, TrendingUp } from 'lucide-react'
 
 interface AsideBarProps {
-  onMark(position: 'above' | 'below'): void
+  onMark(position: 'above' | 'below', entry: number): void
   userBalance: number
 }
 
@@ -53,7 +53,7 @@ export const AsideBar = ({ onMark, userBalance }: AsideBarProps) => {
       <button
         className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-green-600 p-2 text-center transition-all hover:bg-green-700 lg:h-24 lg:w-24 lg:p-4"
         type="button"
-        onClick={() => onMark('above')}
+        onClick={() => onMark('above', entryValue)}
       >
         <TrendingUp className="size-6 lg:size-7" />
         <p className="text-xs lg:text-lg">Acima</p>
@@ -61,7 +61,7 @@ export const AsideBar = ({ onMark, userBalance }: AsideBarProps) => {
       <button
         className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-red-600 p-2 text-center transition-all hover:bg-red-900 lg:h-24 lg:w-24 lg:p-4"
         type="button"
-        onClick={() => onMark('below')}
+        onClick={() => onMark('below', entryValue)}
       >
         <TrendingDown className="size-6 lg:size-7" />
         <p className="text-xs lg:text-lg">Abaixo</p>

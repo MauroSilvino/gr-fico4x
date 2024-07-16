@@ -10,9 +10,13 @@ export type Currency = 'EUR_USD' | 'EUR_JPY' | 'USD_BRL' | 'USD_CAD' | 'GBP_JPY'
 
 interface DashboardViewProps {
   userBalance: number
+  handleEntry(entryValue: number): Promise<boolean>
 }
 
-export const DashboardView = ({ userBalance }: DashboardViewProps) => {
+export const DashboardView = ({
+  userBalance,
+  handleEntry,
+}: DashboardViewProps) => {
   const [currency, setCurrency] = useState<Currency>('EUR_USD')
   const [candleChartData, setCandleChartData] = useState<CandleData | null>(
     null,
@@ -50,6 +54,7 @@ export const DashboardView = ({ userBalance }: DashboardViewProps) => {
           <ChartWrapper
             candleChartData={candleChartData}
             userBalance={userBalance}
+            handleEntry={handleEntry}
           />
         </div>
       )}
