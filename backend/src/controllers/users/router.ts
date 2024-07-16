@@ -9,6 +9,7 @@ import {
 import { login, loginBodySchema, loginResponseSchema } from "./login";
 import { logout, logoutResponseSchema } from "./logout";
 import { balance, balanceResponseSchema } from "./balance";
+import { entry, entryResponseSchema } from "./entry";
 
 export async function usersController(app: FastifyInstance) {
   app.post(
@@ -57,5 +58,17 @@ export async function usersController(app: FastifyInstance) {
       },
     },
     balance
+  );
+  app.patch(
+    "/new-entry/:entryValue",
+    {
+      onRequest: [isUser],
+      schema: {
+        tags: ["Users"],
+        summary: "Handle User Entry",
+        response: entryResponseSchema,
+      },
+    },
+    entry
   );
 }
