@@ -3,12 +3,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import type { CandleData } from 'charts-api'
 
-import { CandleChart } from '@/components/CandleChart'
 import { CurrencySelector } from '@/components/CurrencySelector'
+import { ChartWrapper } from '@/components/ChartWrapper'
 
 export type Currency = 'EUR_USD' | 'EUR_JPY' | 'USD_BRL' | 'USD_CAD' | 'GBP_JPY'
 
-export const DashboardView = () => {
+interface DashboardViewProps {
+  userBalance: number
+}
+
+export const DashboardView = ({ userBalance }: DashboardViewProps) => {
   const [currency, setCurrency] = useState<Currency>('EUR_USD')
   const [candleChartData, setCandleChartData] = useState<CandleData | null>(
     null,
@@ -42,8 +46,11 @@ export const DashboardView = () => {
     <main>
       {candleChartData && (
         <div className="min-h-screen bg-gray-800 p-2 md:px-4 md:py-3">
-          <CurrencySelector setCurrency={setCurrency} />
-          <CandleChart candleChartData={candleChartData} />
+          <CurrencySelector currency={currency} setCurrency={setCurrency} />
+          <ChartWrapper
+            candleChartData={candleChartData}
+            userBalance={userBalance}
+          />
         </div>
       )}
       {!candleChartData && <h1>Carregando...</h1>}

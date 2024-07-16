@@ -10,10 +10,14 @@ import {
 } from '@/mock/CurrencyList'
 
 interface CurrencySelectorProps {
+  currency: Currency
   setCurrency: React.Dispatch<React.SetStateAction<Currency>>
 }
 
-export const CurrencySelector = ({ setCurrency }: CurrencySelectorProps) => {
+export const CurrencySelector = ({
+  currency,
+  setCurrency,
+}: CurrencySelectorProps) => {
   const [currenciesList, setCurrenciesList] = useState<CurrencyCard[]>(
     defaultCurrenciesList,
   )
@@ -122,12 +126,10 @@ export const CurrencySelector = ({ setCurrency }: CurrencySelectorProps) => {
             className="relative rounded-md border border-gray-700 transition-all hover:bg-gray-700"
           >
             <button
-              className="z-[1] inline-flex items-center px-2 py-2 md:px-3"
+              className="z-[1] inline-flex items-center px-2 py-2 disabled:opacity-30 md:px-3"
               type="button"
-              onClick={(event) => {
-                console.log(event.currentTarget)
-                setCurrency(currencyCard.id)
-              }}
+              disabled={currencyCard.id === currency}
+              onClick={() => setCurrency(currencyCard.id)}
             >
               <div className="relative mr-1 block size-6">
                 {currencyCard.flags.map((flag, index) => {

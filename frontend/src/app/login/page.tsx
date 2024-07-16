@@ -40,9 +40,10 @@ export default function Login() {
       }),
       credentials: 'include',
     })
-    const { data } = loginResponse
-
-    if (data?.message && data?.message === 'Invalid Credentials') {
+    if (
+      loginResponse.data?.message &&
+      loginResponse.data?.message === 'Invalid Credentials'
+    ) {
       setError('email', { message: 'Email ou senha inválidos' })
       return
     }

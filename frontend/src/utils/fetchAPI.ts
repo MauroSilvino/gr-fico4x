@@ -9,8 +9,16 @@ export async function fetchAPI<T = unknown>(
     )
 
     const data = (await response.json()) as T
-    return { status: response.status, data }
+
+    return {
+      data,
+      status: response.status,
+      ok: response.ok,
+      headers: response.headers,
+    }
   } catch (error) {
-    return { error, data: null }
+    console.error(error)
+
+    return { data: null, status: 500, ok: false, headers: {}, error }
   }
 }
