@@ -30,22 +30,27 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
   if (passwordsMatch === false)
     return reply.status(400).send({ message: "Invalid Credentials" });
 
-  const authToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET!);
+  const authToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
+    expiresIn: "7d",
+  });
   reply.setCookie("grafico_auth", authToken, {
     httpOnly: true,
     secure: true,
     sameSite: "strict",
     path: "/",
-    maxAge: 60 * 60 * 24 * 60, // 60 dias
+    maxAge: 60 * 60 * 24 * 7, // 7 dias
   });
 
   const userToken = jwt.sign(
     { name: user.name, email: user.email },
-    process.env.JWT_SECRET!
+    process.env.JWT_SECRET!,
+    {
+      expiresIn: "7d",
+    }
   );
   reply.setCookie("grafico_user", userToken, {
     path: "/",
-    maxAge: 60 * 60 * 24 * 60, // 60 dias
+    maxAge: 60 * 60 * 24 * 7, // 7 dias
   });
 
   return reply.status(204).send();

@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 
+import { isUser } from "../../middlewares/isUser";
 import {
   register,
   registerBodySchema,
@@ -7,16 +8,17 @@ import {
 } from "./register";
 import { login, loginBodySchema, loginResponseSchema } from "./login";
 import { logout, logoutResponseSchema } from "./logout";
+import { balance, balanceResponseSchema } from "./balance";
 
 export async function usersController(app: FastifyInstance) {
   app.post(
     "/register",
     {
       schema: {
-        body: registerBodySchema,
-        response: registerResponseSchema,
         tags: ["Users"],
         summary: "Sign Up",
+        body: registerBodySchema,
+        response: registerResponseSchema,
       },
     },
     register
@@ -25,10 +27,10 @@ export async function usersController(app: FastifyInstance) {
     "/login",
     {
       schema: {
-        body: loginBodySchema,
-        response: loginResponseSchema,
         tags: ["Users"],
         summary: "Sign In",
+        body: loginBodySchema,
+        response: loginResponseSchema,
       },
     },
     login
@@ -37,11 +39,23 @@ export async function usersController(app: FastifyInstance) {
     "/logout",
     {
       schema: {
-        response: logoutResponseSchema,
         tags: ["Users"],
         summary: "Logout",
+        response: logoutResponseSchema,
       },
     },
     logout
+  );
+  app.get(
+    "/balance",
+    {
+      onRequest: [isUser],
+      schema: {
+        tags: ["Users"],
+        summary: "Get User Balance",
+        response: balanceResponseSchema,
+      },
+    },
+    balance
   );
 }
