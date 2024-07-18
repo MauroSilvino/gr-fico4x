@@ -4,6 +4,59 @@ import { ApexOptions } from 'apexcharts'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
+type YAxis = [number, number, number, number]
+function getRandomYAxis(
+  originalLastMinuteY: YAxis,
+  randomLastMinuteY: YAxis,
+  secondsCount: number,
+): YAxis {
+  // IMPORTANTE: A média do delay do fetch de dados e da atualização de todos os components do React é 10 segundos, portanto é 50 ao invés de 60
+  /* Desconsiderar a margem dita anteriormente */
+  if (secondsCount >= 50)
+    return [
+      originalLastMinuteY[0],
+      originalLastMinuteY[1],
+      originalLastMinuteY[2],
+      originalLastMinuteY[3],
+    ]
+
+  /* Nos últimos 5 segundos, a vela deve retornar progressivamente ao seu valor real */
+  if (secondsCount >= 45) {
+    /* Obter cálculo da média ponderada, e restaurar vela randômica para vela original */
+    const additionCount = 50 - secondsCount
+    const open = (originalLastMinuteY[0] - randomLastMinuteY[0]) / additionCount
+    const high = (originalLastMinuteY[1] - randomLastMinuteY[1]) / additionCount
+    const low = (originalLastMinuteY[2] - randomLastMinuteY[2]) / additionCount
+    const close =
+      (originalLastMinuteY[3] - randomLastMinuteY[3]) / additionCount
+
+    return [
+      randomLastMinuteY[0] + open,
+      randomLastMinuteY[1] + high,
+      randomLastMinuteY[2] + low,
+      randomLastMinuteY[3] + close,
+    ]
+  }
+
+  // TODO: Adicionar regras em relação a proporção da variação
+  /* Gerar um eixo Y aleatório a cada 1 segundo */
+  const openRandom =
+    (Math.random() * 2 - 1) * (originalLastMinuteY[0] * 0.000005)
+  const highRandom =
+    (Math.random() * 2 - 1) * (originalLastMinuteY[1] * 0.000005)
+  const lowRandom =
+    (Math.random() * 2 - 1) * (originalLastMinuteY[2] * 0.000005)
+  const closeRandom =
+    (Math.random() * 2 - 1) * (originalLastMinuteY[3] * 0.000005)
+
+  return [
+    randomLastMinuteY[0] + openRandom,
+    randomLastMinuteY[1] + highRandom,
+    randomLastMinuteY[2] + lowRandom,
+    randomLastMinuteY[3] + closeRandom,
+  ]
+}
+
 interface CandleChartProps {
   annotations: ApexAnnotations
   seriesData: {
@@ -14,17 +67,7 @@ interface CandleChartProps {
 
 export const CandleChart = ({ annotations, seriesData }: CandleChartProps) => {
   const [newSeriesData, setNewSeriesData] = useState(seriesData)
-
-  type YAxis = [number, number, number, number]
-  const getRandomYAxis = useCallback((y: YAxis): YAxis => {
-    /* Update Y Axis of last candle every second (Generate random Y value) */
-    const rand1 = (Math.random() * 2 - 1) * 0.00002
-    const rand2 = (Math.random() * 2 - 1) * 0.00002
-    const rand3 = (Math.random() * 2 - 1) * 0.00002
-    const rand4 = (Math.random() * 2 - 1) * 0.00002
-
-    return [y[0] + rand1, y[1] + rand2, y[2] + rand3, y[3] + rand4]
-  }, [])
+  const [secondsCount, setSecondsCount] = useState(0)
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -32,18 +75,20 @@ export const CandleChart = ({ annotations, seriesData }: CandleChartProps) => {
       setNewSeriesData((prev) => [
         {
           x: prev[0].x,
-          y: getRandomYAxis(prev[0].y),
+          y: getRandomYAxis(seriesData[0].y, prev[0].y, secondsCount),
         },
         ...newSeriesData.filter((_, i) => i !== 0),
       ])
+      setSecondsCount((prev) => prev + 1)
     }, 1000 * 1) // 1 second
 
     return () => clearInterval(intervalId)
-  }, [newSeriesData, seriesData, setNewSeriesData, getRandomYAxis])
+  }, [seriesData, secondsCount, newSeriesData, setNewSeriesData])
 
   useEffect(() => {
     /* Restart chart on currency change */
     setNewSeriesData(seriesData)
+    setSecondsCount(0)
   }, [seriesData])
 
   const series = [
