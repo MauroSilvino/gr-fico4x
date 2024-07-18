@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ApexOptions } from 'apexcharts'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
@@ -13,15 +13,49 @@ interface CandleChartProps {
 }
 
 export const CandleChart = ({ annotations, seriesData }: CandleChartProps) => {
+  const [newSeriesData, setNewSeriesData] = useState(seriesData)
+
+  type YAxis = [number, number, number, number]
+  const getRandomYAxis = useCallback((y: YAxis): YAxis => {
+    /* Update Y Axis of last candle every second (Generate random Y value) */
+    const rand1 = (Math.random() * 2 - 1) * 0.00002
+    const rand2 = (Math.random() * 2 - 1) * 0.00002
+    const rand3 = (Math.random() * 2 - 1) * 0.00002
+    const rand4 = (Math.random() * 2 - 1) * 0.00002
+
+    return [y[0] + rand1, y[1] + rand2, y[2] + rand3, y[3] + rand4]
+  }, [])
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      /* Generate candle Variation */
+      setNewSeriesData((prev) => [
+        {
+          x: prev[0].x,
+          y: getRandomYAxis(prev[0].y),
+        },
+        ...newSeriesData.filter((_, i) => i !== 0),
+      ])
+    }, 1000 * 1) // 1 second
+
+    return () => clearInterval(intervalId)
+  }, [newSeriesData, seriesData, setNewSeriesData, getRandomYAxis])
+
+  useEffect(() => {
+    /* Restart chart on currency change */
+    setNewSeriesData(seriesData)
+  }, [seriesData])
+
   const series = [
     {
       name: 'candle',
-      data: seriesData,
+      data: newSeriesData,
     },
   ]
 
   const options: ApexOptions = {
     chart: {
+      id: 'realtime',
       type: 'candlestick',
     },
     colors: ['#6b7280'],
@@ -68,7 +102,6 @@ export const CandleChart = ({ annotations, seriesData }: CandleChartProps) => {
   return (
     <div className="h-[90vh] grow">
       <Chart
-        id="candle-chart"
         type="candlestick"
         series={series}
         height="100%"
