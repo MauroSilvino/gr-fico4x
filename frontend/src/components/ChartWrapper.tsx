@@ -46,10 +46,16 @@ export const ChartWrapper = ({
     const latestData = seriesData[0]
     const color = position === 'above' ? '#16a34a' : '#dc2626'
 
+    const newXAxisAnnotation = {}
+    /*
     const newXAxisAnnotation = {
       x: new Date(seriesData[0].x).getTime(),
       borderColor: color,
     } as XAxisAnnotations
+    */
+
+    const newYAxisAnnotation = {}
+    /*
     const newYAxisAnnotation = {
       y: latestData.y[3],
       borderColor: color,
@@ -63,6 +69,8 @@ export const ChartWrapper = ({
         position: 'left',
       },
     } as YAxisAnnotations
+    */
+
     const newPointAnnotation = {
       x: new Date(seriesData[0].x).getTime(),
       y: seriesData[0].y[3],
