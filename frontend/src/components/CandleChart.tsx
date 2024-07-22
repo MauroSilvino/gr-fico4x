@@ -219,7 +219,11 @@ export const CandleChart = ({ annotations, seriesData }: CandleChartProps) => {
         style: {
           colors: ['#6b7280'],
         },
+        formatter: function (value: number) {
+          return value.toFixed(5)
+        },
       },
+      opposite: true,
     },
     annotations: annotations,
   }
