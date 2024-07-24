@@ -1,35 +1,58 @@
 import React, { useEffect, useState } from 'react'
-import type { CandleData } from 'charts-api'
+import { connect } from 'socket.io-client'
 import { toast } from 'react-toastify'
+import type { CandleChartSeriesData, Currency } from 'charts-api'
 
 import { CandleChart } from './CandleChart'
 import { AsideBar } from './AsideBar'
+import { Clock } from 'lucide-react'
 
 interface CandleChartProps {
-  candleChartData: CandleData
+  annotations: ApexAnnotations
+  currency: Currency
   userBalance: number
+  setAnnotations: React.Dispatch<React.SetStateAction<ApexAnnotations>>
   handleEntry(entryValue: number): Promise<boolean>
 }
 
 export const ChartWrapper = ({
-  candleChartData,
+  annotations,
+  currency,
   userBalance,
+  setAnnotations,
   handleEntry,
 }: CandleChartProps) => {
-  const [annotations, setAnnotations] = useState<ApexAnnotations>({
-    yaxis: [],
-    xaxis: [],
-    points: [],
-  })
+  const [candleChartSeriesData, setCandleChartSeriesData] =
+    useState<CandleChartSeriesData | null>(null)
+  const [secondsCount, setSecondsCount] = useState(0)
 
-  const seriesData = candleChartData.data?.map((obj) => {
-    const objKey = Object.keys(obj)[0]
-    const values = Object.values(obj[objKey]).map(Number) // Convertendo para números
-    return {
-      x: new Date(objKey).toISOString(),
-      y: values as [number, number, number, number], // Números das velas (open, high, low, close)
+  useEffect(() => {
+    const socket = connect(process.env.NEXT_PUBLIC_API_BASE_URL!)
+
+    socket.on('connect', () => {
+      socket.emit('chart_connect', JSON.stringify(currency))
+    })
+
+    socket.on('chart_update', (message) => {
+      const chartData = JSON.parse(message)
+      setCandleChartSeriesData(chartData)
+    })
+
+    socket.on('chart_variation', (message) => {
+      const variationObject = JSON.parse(message)
+      const { variation, secondsCount } = variationObject
+      setSecondsCount(secondsCount)
+      setCandleChartSeriesData((prev) => {
+        if (prev && prev.length === 99) return [variation, ...prev]
+
+        return prev ? [variation, ...prev.filter((_, i) => i !== 0)] : null
+      })
+    })
+
+    return () => {
+      socket.disconnect()
     }
-  })
+  }, [currency])
 
   async function onMark(position: 'above' | 'below', entry: number) {
     if (entry > userBalance) {
@@ -43,8 +66,10 @@ export const ChartWrapper = ({
       return
     }
 
-    const latestData = seriesData[0]
     const color = position === 'above' ? '#16a34a' : '#dc2626'
+
+    const latestData = candleChartSeriesData?.[0]
+    if (!latestData) return
 
     const newXAxisAnnotation = {}
     /*
@@ -72,8 +97,8 @@ export const ChartWrapper = ({
     */
 
     const newPointAnnotation = {
-      x: new Date(seriesData[0].x).getTime(),
-      y: seriesData[0].y[3],
+      x: new Date(latestData.x).getTime(),
+      y: latestData.y[3],
       marker: {
         size: 6,
         fillColor: color,
@@ -117,16 +142,19 @@ export const ChartWrapper = ({
     }
   }
 
-  useEffect(() => {
-    const hasStorageMarkers = localStorage.getItem('grafico_mark')
-    const markers = hasStorageMarkers ? JSON.parse(hasStorageMarkers) : null
-    if (markers) setAnnotations(markers)
-  }, [])
-
   return (
     <div className="flex rounded-lg bg-gray-800">
-      <CandleChart annotations={annotations} seriesData={seriesData} />
+      <CandleChart
+        candleChartSeriesData={candleChartSeriesData ?? []}
+        annotations={annotations}
+      />
       <AsideBar onMark={onMark} userBalance={userBalance} />
+      <div className="absolute bottom-3 right-3">
+        <div className="border-md flex items-center gap-1 border border-[#4b5563] border-opacity-30 bg-[#1e2e43] bg-opacity-30 px-3 py-1">
+          <Clock size={16} />
+          <span className="text-sm font-medium">{60 - secondsCount}</span>
+        </div>
+      </div>
     </div>
   )
 }

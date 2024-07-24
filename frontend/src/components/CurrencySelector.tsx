@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Plus, X } from 'lucide-react'
+import type { Currency } from 'charts-api'
 
-import { Currency } from '@/layouts/DashboardView'
 import {
   allCurrenciesList,
   CurrencyCard,

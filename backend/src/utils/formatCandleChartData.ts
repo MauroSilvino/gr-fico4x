@@ -19,5 +19,20 @@ export function formatCandleChartData(candleChartObj: CandleResponseType) {
     ),
   };
 
-  return candleChartData;
+  const seriesData = candleChartData.data.map((obj) => {
+    const objKey = Object.keys(obj)[0];
+    const values = Object.values(obj[objKey] as string).map(Number) as [
+      number,
+      number,
+      number,
+      number
+    ];
+
+    return {
+      x: new Date(objKey).toISOString(),
+      y: values, // [open, high, low, close]
+    };
+  });
+
+  return seriesData;
 }

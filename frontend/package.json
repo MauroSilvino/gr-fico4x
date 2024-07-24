@@ -18,6 +18,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "react-toastify": "^10.0.5",
+    "socket.io-client": "^4.7.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
