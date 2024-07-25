@@ -42,9 +42,9 @@ function getRandomYAxis(
     ];
   }
 
-  // IMPORTANTE: Nos primeiros 50 segundos, a vela deve OBRIGATORIAMENTE alcançar a máxima e a mínima da vela original
-  // Cada variação deve ter no mínimo 15 segundos (30 segundos no total), portanto restam 20 segundos para randomizar
-  const secondsToOtherLimit = 50 - secondsToFirstLimit;
+  // IMPORTANTE: Nos primeiros 44 segundos, a vela deve OBRIGATORIAMENTE alcançar a máxima e a mínima da vela original
+  // Cada variação deve ter no mínimo 15 segundos (30 segundos no total), portanto restam 14 segundos para randomizar
+  const secondsToOtherLimit = 44 - secondsToFirstLimit;
   const isFirstLimitLastSeconds =
     secondsCount >= secondsToFirstLimit - 5 &&
     secondsCount < secondsToFirstLimit;
@@ -84,7 +84,7 @@ function getRandomYAxis(
     ];
   }
 
-  let closeRandom = (Math.random() * 2 - 1) * (randomLastMinuteY[3] * 0.000005);
+  let closeRandom = (Math.random() * 2 - 1) * (randomLastMinuteY[3] * 0.00001);
   // Caso o número gerado ultrapasse os limites do original, ignorar o número gerado
   if (
     randomLastMinuteY[3] + closeRandom > originalLastMinuteY[1] ||
@@ -94,11 +94,7 @@ function getRandomYAxis(
   }
 
   const open = randomLastMinuteY[0];
-  // const close = randomLastMinuteY[3] + closeRandom;
-  const close =
-    (Math.random() * 2 - 1) *
-      (originalLastMinuteY[1] - originalLastMinuteY[2]) +
-    originalLastMinuteY[2];
+  const close = randomLastMinuteY[3] + closeRandom;
   const high = close > randomLastMinuteY[1] ? close : randomLastMinuteY[1]; // Se o fechamento aleatório ultrapassar o máximo, o máximo será o fechamento
   const low = close < randomLastMinuteY[2] ? close : randomLastMinuteY[2]; // Se o fechamento aleatório ultrapassar o mínimo, o máximo será o fechamento
 

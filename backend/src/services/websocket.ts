@@ -58,7 +58,7 @@ export async function websocket(app: FastifyInstance) {
   let variationMetadata: RandomVariationMetadata = {
     secondsCount: 0,
     firstLimit: "max",
-    secondsToFirstLimit: 25,
+    secondsToFirstLimit: 22,
   };
 
   // Starting Web Socket server
