@@ -25,8 +25,8 @@ function getRandomYAxis(
     ];
   }
 
-  /* Nos últimos 6 segundos, a vela deve retornar progressivamente ao seu valor real */
-  if (secondsCount > 50) {
+  /* Nos últimos 5 segundos, a vela deve retornar progressivamente ao seu valor real */
+  if (secondsCount >= 52) {
     if (process.env.NODE_ENV === "development") console.log("Última Variação");
     /* Obter cálculo da média ponderada, e restaurar vela randômica para vela original */
     const additionCount = 57 - randomVariationMetadata.secondsCount;
